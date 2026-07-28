@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/test.html",
+      "destination": "/itqan-html/test.html",
       "permanent": false
     }
   ]
