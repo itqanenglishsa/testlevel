@@ -1,0 +1,725 @@
+<script>
+  const allowed = ["test.html", "results.html"];
+
+  const current = location.pathname.split("/").pop().toLowerCase();
+
+  if (!allowed.includes(current)) {
+    window.stop();
+    location.replace("test.html");
+  }
+</script>
+
+
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Courses — Itqan English</title>
+<meta name="description" content="Browse Itqan English digital courses across all CEFR levels."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap"/>
+<link rel="stylesheet" href="styles.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet"/>
+</head><body>
+
+<header class="header">
+ <div class="header-inner">
+  <a href="../index.html" class="logo">
+    <img src="../images/logo.png" alt="Logo" style="height:40px">
+  </a>
+
+  <a href="#" id="auth-trigger-icon" class="user-icon-link">
+    <img src="../images/UserIcon.png" alt="User" style="height:35px; width:35px; object-fit:contain;">
+  </a>
+
+  <nav class="nav">
+    <div class="menu-wrap">
+      <button id="menu-trigger" class="pill" aria-haspopup="true">
+        ☰ <span data-i18n="nav.menu">القائمة</span>
+      </button>
+
+      <div id="menu-panel" class="menu-panel">
+        <a href="../index.html" data-i18n="nav.home">الرئيسية</a>
+        <a href="courses.html" data-i18n="nav.courses">الدورات</a>
+        <a href="about.html" data-i18n="nav.about">عن المنصة</a>
+      </div>
+    </div>
+
+    <button class="pill" onclick="setLang(getLang()==='en'?'ar':'en')">
+        🌐
+      <span data-i18n="lang.toggle" style="display:none;">English</span>
+    </button>
+  </nav>
+</div>
+
+<div id="auth-modal-overlay" class="pop-modal-overlay">
+  <div class="pop-modal-content-box">
+    <button id="close-modal-btn" class="pop-close-modal-x">&times;</button>
+    
+    <div class="pop-logo-wrapper">
+      <img src="../images/logo.png" class="pop-auth-logo" alt="Logo">
+    </div>
+    
+    <div id="pop-dynamic-form"></div>
+  </div>
+</div>
+</header>
+
+<section class="hero" style="border-bottom:1px solid color-mix(in oklch,var(--border) 60%,transparent)">
+  <div class="hero-bg"></div>
+  <div class="container text-center" style="padding:5rem 1.5rem">
+    <span class="badge">✨ <span data-i18n="courses.kicker"></span></span>
+    <h1 class="h1 mt-5" data-i18n="courses.title"></h1>
+    <p class="lead" style="margin:1.25rem auto 0;max-width:36rem" data-i18n="courses.subtitle"></p>
+  </div>
+</section>
+
+<main class="container" style="padding:4rem 1.5rem">
+  <div class="flex items-center gap-2 mb-6">
+    <span style="color:var(--primary)">★</span>
+    <h2 class="text-2xl font-bold" data-i18n="courses.featured"></h2>
+  </div>
+
+  <div id="featured" class="grid grid-2"></div>
+
+  <div id="skills-container">
+
+    <!-- قسم Foundation -->
+    <div class="skill-block" data-skill="Foundation">
+      <h2 class="skill-title">
+        <img src="../images/FoundationIcon.png" class="skill-main-icon">
+        <span data-i18n="section.Foundation"></span>
+      </h2>
+
+      <div class="skill-filters" id="foundation-filters"></div>
+      <div class="skill-grid" id="foundation-grid"></div>
+    </div>
+
+    <!-- قسم vocab500 -->
+    <div class="skill-block" data-skill="vocab500">
+      <h2 class="skill-title">
+  <img src="../images/VocabularyIcon.png" class="skill-main-icon">
+  <span data-i18n="section.Vocabulary"></span>
+</h2>
+      <div class="skill-filters" id="vocab500-filters"></div>
+      <div class="skill-grid" id="vocab500-grid"></div>
+    </div>
+
+  </div>
+
+  <div class="card card-lg text-center" style="margin-top:5rem;padding:2.5rem">
+    <h3 class="h2" data-i18n="courses.cta.title"></h3>
+    <p class="muted mt-3" style="max-width:28rem;margin-left:auto;margin-right:auto" data-i18n="courses.cta.desc"></p>
+    <a href="test.html" class="cta cta-lg mt-6">
+      <span data-i18n="courses.cta.button"></span> →
+    </a>
+  </div>
+</main>
+
+
+<!-- نافذة vocab500 -->
+<div id="vocab500-modal" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal-overlay" id="vocab500-modal-overlay"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="vocab500-modal-title">
+    <div class="modal-body"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary modal-close-btn">إغلاق</button>
+      <button type="button" class="cta modal-primary-btn">سجّل الآن</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة Foundation -->
+<div id="foundation-modal" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal-overlay" id="foundation-modal-overlay"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="foundation-modal-title">
+    <div class="modal-body"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary modal-close-btn">إغلاق</button>
+      <button type="button" class="cta modal-primary-btn">سجّل الآن</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- نافذة Foundation -->
+<div id="foundation-modal" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal-overlay" id="foundation-modal-overlay"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="foundation-modal-title">
+    <div class="modal-body">
+      <!-- foundation content is rendered dynamically -->
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary modal-close-btn">إغلاق</button>
+      <button type="button" class="cta modal-primary-btn">سجّل الآن</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+<!-- 1. استدعاء مكتبة سوبابيز أولاً -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.supabaseClient = supabase.createClient("https://jacylpaxxgubvhofpuup.supabase.co", "sb_publishable_nZWgIK-1xvFsUEBYMfnsrw_l_Dzl2Ai");
+</script>
+
+
+
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.supabaseClient = supabase.createClient("https://jacylpaxxgubvhofpuup.supabase.co", "sb_publishable_nZWgIK-1xvFsUEBYMfnsrw_l_Dzl2Ai");
+</script>
+
+
+
+
+
+<footer class="footer"><div class="footer-inner">
+  <div class="logo"><img src="../images/logo.png" alt="Logo" style="height:40px"></div>
+  <div class="stores" style="margin-top:0">
+  <a href="https://apps.apple.com/sa/app/english-إتقان/id6759668469" target="_blank" rel="noopener">
+  <img src="../images/appleIcon.png" alt="Download on the App Store" style="height:50px">
+</a>
+  <div class="store store-disabled" aria-disabled="true">
+    <span style="font-size:1.5rem">▶</span>
+    <span class="store-lines"><span class="store-top" data-i18n="store.google.top"></span><span class="store-bot" data-i18n="store.google.soon"></span></span>
+  </div>
+</div>
+
+<div class="box">
+    <h3 style="font-size: 1.2rem; margin:0; padding:0; margin-left:5px;" data-i18n="footer.contact">
+    Contact Us
+</h3>
+
+    <div style="display:flex; align-items:center; gap:10px; margin:0.5rem 0;">
+        <a href="https://wa.me/966508538283" target="_blank">
+            <img src="../images/WhatsAppIcon.png" style="width:31px; height:31px;">
+        </a>
+
+        <a href="https://www.tiktok.com/@itqanenglish" target="_blank">
+            <img src="../images/TikTokIcon.png" style="width:30px; height:30px;">
+        </a>
+
+        <a href="https://t.me/Itqanenglish_sa" target="_blank">
+            <img src="../images/TelegramIcon.png" style="width:30px; height:30px;">
+        </a>
+    </div>
+</div>
+
+  <p>© <span id="year"></span> Itqan English. <span data-i18n="footer.rights"></span></p>
+</div></footer>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.supabaseClient = supabase.createClient("https://jacylpaxxgubvhofpuup.supabase.co", "sb_publishable_nZWgIK-1xvFsUEBYMfnsrw_l_Dzl2Ai");
+</script>
+
+
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.supabaseClient = supabase.createClient("https://jacylpaxxgubvhofpuup.supabase.co", "sb_publishable_nZWgIK-1xvFsUEBYMfnsrw_l_Dzl2Ai");
+</script>
+
+<script src="app.js"></script>
+
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.supabaseClient = supabase.createClient("https://jacylpaxxgubvhofpuup.supabase.co", "sb_publishable_nZWgIK-1xvFsUEBYMfnsrw_l_Dzl2Ai");
+</script>
+
+<script src="app.js"></script>
+
+<script>
+// تخزين الكورسات التي يمتلكها المستخدم حالياً وحالة تسجيل دخوله
+let userPurchasedKeys = [];
+let isLoggedIn = false;
+
+// المسار الموحد والثابت لفتح محتوى الدورة بعد الشراء
+const COURSE_VIEW_BASE = "course-view.html?id=";
+
+const SKILL_COURSES = {
+  Foundation: {
+    All: [
+      { key: "english-foundation", level: "A1", price: 59 }
+    ],
+    Free: [
+      { key: "english-foundation", level: "A1", price: 59 }
+    ]
+  },
+
+  vocab500: {
+    All: [
+      { key: "vocab500", level: "A1", price: 79 }
+    ],
+    "79": [
+      { key: "vocab500", level: "A1", price: 79 }
+    ]
+  }
+};
+
+
+
+
+
+
+async function checkUserStatus() {
+  if (window.supabaseClient) {
+    try {
+      const { data: { user } } = await window.supabaseClient.auth.getUser();
+      if (user) {
+        isLoggedIn = true;
+        const { data: userCourses } = await window.supabaseClient
+          .from('user_courses')
+          .select('course_key');
+        
+        if (userCourses) {
+          userPurchasedKeys = userCourses.map(item => item.course_key);
+        }
+      } else {
+        isLoggedIn = false;
+      }
+    } catch (err) {
+      console.error("Error checking user status:", err);
+    }
+  }
+}
+
+async function renderCourses(){
+  const lang = getLang();
+  const featuredContainer = document.getElementById("featured");
+
+  // فحص حالة المستخدم والكورسات المشتراة من سوبابيز أولاً
+  await checkUserStatus();
+
+  // 🔹 1) بناء قسم Featured courses ذكياً
+  if (featuredContainer) {
+    featuredContainer.innerHTML = COURSES
+      .filter(c => c.featured)
+      .map(c => {
+        const isPurchased = userPurchasedKeys.includes(c.key);
+        const cardHtml = renderCourseCard(c, lang, isPurchased);
+
+        if (isPurchased) {
+          return cardHtml.replace(
+            /href="[^"]*profile\.html[^"]*"/g,
+            `href="${getCoursePath(c.key)}"`
+          );
+        }
+
+        return cardHtml;
+      })
+      .join('');
+  }
+
+  // 🔹 2) تعريف الفلاتر لكل قسم
+  const LEVELS = {
+    Foundation: ["All", "Free"],
+    vocab500: ["All", "79"]
+  };
+
+  // 🔹 3) الأقسام الموجودة في الصفحة
+  const SKILLS = ["Foundation", "vocab500"];
+
+  // 🔹 4) بناء الفلاتر لكل قسم
+  SKILLS.forEach(skill => {
+    const filterEl = document.getElementById(`${skill.toLowerCase()}-filters`);
+    if (filterEl) {
+      filterEl.innerHTML = LEVELS[skill].map(level => {
+        let label = level;
+
+        if (level === "All") label = t("filter.all");
+        else if (level === "Free") label = t("filter.free");
+        else if (level === "79") label = t("filter.vocab79");
+
+        return `
+          <button class="filter-btn" onclick="setActiveFilter(this, '${skill}', '${level}')">
+            ${label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // 🔹 5) عرض الكروت الافتراضية لكل قسم
+    renderSkill(skill, "All");
+  });
+}
+
+
+function setActiveFilter(btn, skill, level){
+  document.querySelectorAll(`#${skill.toLowerCase()}-filters .filter-btn`)
+    .forEach(b => b.classList.remove('active-filter'));
+
+  btn.classList.add('active-filter');
+  renderSkill(skill, level);
+}
+
+
+
+function formatNumber(num){
+  const lang = getLang();
+  const n = Number(num);
+  if (isNaN(n)) return num;
+
+  return lang === "ar" ? n.toLocaleString("ar-EG") : n.toLocaleString("en-US");
+}
+
+function renderSkill(skill, level){
+  const courses = SKILL_COURSES[skill][level];
+  if (!courses) return; // حماية من الانهيار
+
+  const courseCards = courses.map((c) => {
+
+    const fullCourse = COURSES.find(item => item.key === c.key);
+
+    const courseTitle = fullCourse 
+      ? fullCourse.title[getLang()] 
+      : "";
+
+    const courseDesc = fullCourse 
+      ? fullCourse.description[getLang()] 
+      : "";
+
+    const courseLessons = fullCourse
+      ? (
+         c.key === "vocab500"
+  ? (getLang() === 'ar' ? `${formatNumber(14)} وحدة` : "14 Units")
+
+            : `${getLang() === 'ar' ? formatNumber(fullCourse.lessons) : fullCourse.lessons} ${getLang() === 'ar' ? 'وحدات' : 'Units'}`
+        )
+      : "";
+
+    const coursePrice = fullCourse ? fullCourse.price[getLang()] : "";
+
+    return `
+      <article class="card" style="display:flex;flex-direction:column">
+        <div class="flex items-center gap-2">
+          <span class="lvl-pill lvl-pill-sm">${c.level}</span>
+        </div>
+
+        <h3 class="text-lg font-semibold mt-3">${courseTitle}</h3>
+
+        <p class="muted text-sm mt-2">${courseDesc}</p>
+
+        <div class="mt-4 flex items-center gap-4 muted text-xs">
+          <span>📖 ${courseLessons}</span>
+        </div>
+
+        <div class="mt-5 flex items-center justify-between" style="border-top:1px solid var(--border);padding-top:1rem">
+          <span class="font-bold">
+            <img src="../images/SARIcon.png" alt="SAR" class="currency-icon">
+            ${formatNumber(coursePrice)}
+          </span>
+
+          <a href="#" class="text-primary text-sm font-semibold course-details-trigger" data-course-key="${c.key}">
+            ${t("courses.details")} →
+          </a>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  const gridEl = document.getElementById(`${skill.toLowerCase()}-grid`);
+  if (gridEl) gridEl.innerHTML = courseCards;
+}
+
+
+function getFoundationModalContent(lang){
+  if(lang === 'ar'){
+    return `
+      <h2 id="foundation-modal-title">أولاً: عن الدورة (في سطور)</h2>
+      <p>انطلق في رحلة التحدث بالإنجليزية بثقة.. من الصفر وحتى التأسيس المتين!<br>
+      التجربة التعليمية الأكثر تفاعلية على الإطلاق لتأسيس لغتك الإنجليزية (Level A1). هنا</p>
+
+      <h3>ثانياً: محتوى الدورة (ماذا ستتعلم؟)</h3>
+      <div class="modal-list">
+        <p><strong>الوحدة 1 | الحروف والأصوات:</strong> نطق الحروف، التمييز بين أصواتها، والحروف الصامتة والمركبة.</p>
+        <p><strong>الوحدة 2 | فعل الكينونة (Verb to Be):</strong> وصف الأشخاص والأشياء، وصياغة الإثبات والنفي والسؤال.</p>
+        <p><strong>الوحدة 3 | أقسام الكلام:</strong> معرفة الأسماء، الأفعال، الصفات، وحروف الجر وكيف تعمل معاً.</p>
+        <p><strong>الوحدة 4 | بناء الجملة والأدوات:</strong> تركيب جملة صحيحة (فاعل + فعل + مفعول) واستخدام (A, An, The).</p>
+        <p><strong>الوحدة 5 | المضارع البسيط:</strong> التعبير عن روتينك اليومي، وعاداتك، وصياغة الأسئلة باستخدام (Do/Does).</p>
+        <p><strong>الوحدة 6 | مفردات ومحادثات:</strong> التحيات، الأرقام، أفراد العائلة، والتدرب على محادثات واقعية للتعريف بالنفس.</p>
+      </div>
+
+      <h3>ثالثاً: الميزات التفاعلية (سر تميّز الدورة)</h3>
+      <p>ما يجعل هذه الدورة الفريدة من نوعها والأفضل على الإطلاق هو نظام التفاعل الذكي المدمج بها:</p>
+      <div class="modal-list">
+        <p><strong>نظام صوتي تفاعلي:</strong> لا تخمن النطق بعد اليوم! كل كلمة وجملة مدعومة بأزرار صوتية فورية لتسمع النطق الصحيح وتكرره.</p>
+        <p><strong>تمارين تطبيقية مستمرة:</strong> بعد كل قاعدة ومفردة، ستجد تمارين تفاعلية فورية (سحب وإفلات، إعادة ترتيب، واختيارات) لتتأكد من فهمك في نفس اللحظة.</p>
+        <p><strong>اختبار نهائي شامل:</strong> في نهاية الدورة، ستخوض اختباراً ذكياً يقيس بدقة مدى استيعابك لكل ما درست ويؤكد جاهزيتك للانتقال للمستوى التالي.</p>
+        <p><strong>شهادة إتمام:</strong> بمجرد اجتيازك للاختبار النهائي، ستحصل فوراً على شهادة إثبات كفاءة تتوج بها جهودك المبذولة.</p>
+      </div>
+    `;
+  }
+  
+  // النص باللغة الإنجليزية
+  return `
+      <h2 id="foundation-modal-title">First: About the Course</h2>
+      <p>Start your journey to speaking English with confidence—from absolute beginner to a strong foundation!<br>
+      Experience one of the most interactive English learning courses designed for Level A1 learners. Build your language skills through engaging lessons, practical exercises, and interactive learning tools.</p>
+
+      <h3>Second: Course Content (What Will You Learn?)</h3>
+      <div class="modal-list">
+        <p><strong>Unit 1 | Letters & Sounds:</strong> Learn the English alphabet, letter pronunciation, different letter sounds, silent letters, and common letter combinations.</p>
+        <p><strong>Unit 2 | Verb to Be:</strong> Learn how to describe people and objects, and form affirmative, negative, and question sentences using the verb to be.</p>
+        <p><strong>Unit 3 | Parts of Speech:</strong> Understand nouns, verbs, adjectives, and prepositions, and learn how they work together to form correct sentences.</p>
+        <p><strong>Unit 4 | Sentence Structure & Articles:</strong> Build correct English sentences using the basic structure (Subject + Verb + Object) and learn how to use A, An, and The correctly.</p>
+        <p><strong>Unit 5 | Present Simple Tense:</strong> Talk about your daily routines and habits, and learn how to ask and answer questions using Do and Does.</p>
+        <p><strong>Unit 6 | Vocabulary & Conversations:</strong> Learn greetings, numbers, family members, and practice real-life conversations to introduce yourself confidently.</p>
+      </div>
+
+      <h3>Third: Interactive Features (What Makes This Course Unique?)</h3>
+      <p>What makes this course truly unique is its built-in interactive learning system:</p>
+      <div class="modal-list">
+        <p><strong>Interactive Audio Support:</strong> Never guess the pronunciation again! Every word and sentence includes an instant audio button so you can listen, repeat, and improve your pronunciation.</p>
+        <p><strong>Continuous Practice Activities:</strong> After every lesson, you’ll complete interactive exercises such as drag-and-drop activities, sentence ordering, and multiple-choice questions to reinforce your understanding.</p>
+        <p><strong>Comprehensive Final Exam:</strong> At the end of the course, you’ll take a smart final assessment that accurately measures your progress and confirms your readiness for the next level.</p>
+        <p><strong>Certificate of Completion:</strong> Once you successfully pass the final exam, you’ll instantly receive a certificate recognizing your achievement and the effort you’ve put into completing the course.</p>
+      </div>
+    `;
+}
+
+function handleRegistrationAction(courseKey) {
+  if (!isLoggedIn) {
+    if (typeof popShowAlert !== 'undefined') {
+      popShowAlert(getLang() === 'ar' ? 'يرجى تسجيل الدخول أو إنشاء حساب أولاً لتتمكن من التسجيل في الدورة.' : 'Please login or create an account first to register for the course.');
+    } else {
+      alert(getLang() === 'ar' ? 'يرجى تسجيل الدخول أولاً' : 'Please login first');
+    }
+    const authTrigger = document.getElementById("auth-trigger-icon");
+    if (authTrigger) authTrigger.click();
+  } else {
+    if (typeof goToSalla !== 'undefined') {
+      goToSalla(courseKey);
+    } else {
+      alert("سيتم تفعيل الشراء عبر تطبيق سلة قريبًا ❤️");
+    }
+  }
+}
+
+function renderFoundationModal(){
+  const lang = getLang();
+  const modalBody = document.querySelector('#foundation-modal .modal-body');
+  const actions = document.querySelector('#foundation-modal .modal-actions');
+  
+  if(modalBody) modalBody.innerHTML = getFoundationModalContent(lang);
+  
+  if(actions){
+    const isPurchased = userPurchasedKeys.includes('english-foundation');
+    
+    // زر النافذة المنبثقة الداخلي يتغير ديناميكياً
+const primaryBtn = isPurchased
+  ? `<button type="button" class="cta modal-primary-btn" onclick="window.location.href='../Foundation-Course/foundation-course/index.html'">${lang === 'ar' ? 'فتح الدورة ←' : 'Open Course ←'}</button>`
+  : `<button type="button" class="cta modal-primary-btn" onclick="handleRegistrationAction('english-foundation')">${lang === 'ar' ? 'سجّل الآن' : 'Register Now'}</button>`;
+
+    actions.innerHTML = `
+      <button type="button" class="btn-secondary modal-close-btn">${lang === 'ar' ? 'إغلاق' : 'Close'}</button>
+      ${primaryBtn}
+    `;
+  }
+}
+
+function openFoundationModal(event){
+  if(event) event.preventDefault();
+  const modal = document.getElementById('foundation-modal');
+  if(!modal) return;
+  renderFoundationModal();
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFoundationModal(){
+  const modal = document.getElementById('foundation-modal');
+  if(!modal) return;
+  modal.classList.add('hidden');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+function renderVocab500Modal(){
+  const lang = getLang();
+  const modalBody = document.querySelector('#vocab500-modal .modal-body');
+  const actions = document.querySelector('#vocab500-modal .modal-actions');
+
+  if(modalBody) modalBody.innerHTML = getVocab500ModalContent(lang);
+
+  if(actions){
+    const isPurchased = userPurchasedKeys.includes('vocab500');
+
+    const primaryBtn = isPurchased
+      ? `<button type="button" class="cta modal-primary-btn" onclick="window.location.href='../vocab500/vocab500/index.html'">${lang === 'ar' ? 'فتح الدورة ←' : 'Open Course ←'}</button>`
+      : `<button type="button" class="cta modal-primary-btn" onclick="handleRegistrationAction('vocab500')">${lang === 'ar' ? 'سجّل الآن' : 'Register Now'}</button>`;
+
+    actions.innerHTML = `
+      <button type="button" class="btn-secondary modal-close-btn">${lang === 'ar' ? 'إغلاق' : 'Close'}</button>
+      ${primaryBtn}
+    `;
+  }
+}
+
+
+function getVocab500ModalContent(lang){
+  if(lang === 'ar'){
+    return `
+      <h2 id="vocab500-modal-title">أولاً: عن الدورة (في سطور)</h2>
+      <p>
+        انطلق في رحلة إتقان أهم مفردات اللغة الإنجليزية اليومية بثقة.. من الصفر وحتى بناء حصيلة لغوية قوية!
+        التجربة التعليمية الأكثر تفاعلية على الإطلاق لإتقان 500 كلمة أساسية في المستوى A1، حيث تتعلم الكلمات الأكثر استخدامًا في الحياة اليومية بطريقة ممتعة وعملية.
+      </p>
+
+      <h3>ثانياً: محتوى الدورة (ماذا ستتعلم؟)</h3>
+      <div class="modal-list">
+        <p><strong>القسم 1 – القسم 14 | 500 كلمة أساسية:</strong> تتكون الدورة من 14 قسمًا، ويحتوي كل قسم على 30 إلى 40 كلمة مختارة بعناية من أكثر الكلمات استخدامًا في اللغة الإنجليزية.</p>
+
+        <p>ستتعلم في كل قسم:</p>
+        <p>• معنى كل كلمة باللغة العربية.</p>
+        <p>• النطق الصحيح لكل كلمة.</p>
+        <p>• أمثلة بسيطة توضح طريقة استخدامها.</p>
+        <p>• كيفية تمييز الكلمات واستخدامها في الحياة اليومية.</p>
+      </div>
+
+      <h3>ثالثاً: الميزات التفاعلية (سر تميّز الدورة)</h3>
+      <div class="modal-list">
+        <p><strong>شرح مبسط لكل كلمة:</strong> لا تحفظ الكلمات بشكل عشوائي! ستتعلم معنى كل مفردة بطريقة واضحة وسهلة مع أمثلة تساعدك على فهم استخدامها الحقيقي.</p>
+
+        <p><strong>نظام صوتي تفاعلي:</strong> استمع إلى النطق الصحيح لكل كلمة بضغطة واحدة، ثم كررها حتى تتقن النطق بثقة.</p>
+
+        <p><strong>شريط تقدم ذكي:</strong> تابع تقدمك في كل قسم لحظة بلحظة، واعرف نسبة إنجازك حتى تصل إلى إكمال الدورة بالكامل.</p>
+
+        <p><strong>المعلم الذكي (Chat Bot):</strong> إذا احتجت إلى فهم أعمق لأي كلمة، يمكنك سؤال المعلم الذكي ليقدم لك شروحات إضافية، وأمثلة، ونصائح تساعدك على ترسيخ المفردات.</p>
+
+        <p><strong>مؤلف القصص:</strong> أنشئ قصصًا قصيرة باستخدام الكلمات التي تعلمتها، لتشاهدها في سياقات مختلفة وتتعلم استخدامها بطريقة طبيعية وسهلة التذكر.</p>
+
+        <p><strong>اختبار قصير في كل قسم:</strong> أثناء التعلُّم في الأقسام، ستجد اختبارًا تفاعليًا يقيس مدى استيعابك للمفردات.</p>
+
+        <p><strong>نظام نقاط الخبرة (XP):</strong> احصل على نقاط خبرة أثناء التعلم، وإكمال الاختبارات، واستخدام الميزات التفاعلية، لتجعل رحلتك التعليمية أكثر تحفيزًا ومتعة.</p>
+      </div>
+    `;
+  }
+
+  return `
+      <h2 id="vocab500-modal-title">First: About the Course</h2>
+      <p>
+        Start your journey toward mastering the most essential everyday English vocabulary with confidence—from absolute beginner to building a strong vocabulary foundation!
+        This course offers one of the most interactive learning experiences for mastering 500 essential A1-level English words. You’ll learn the most frequently used vocabulary in daily life through a fun, practical, and engaging approach.
+      </p>
+
+      <h3>Second: Course Content (What Will You Learn?)</h3>
+      <div class="modal-list">
+        <p><strong>Sections 1–14 | 500 Essential Words:</strong> The course consists of 14 sections, with each section containing 30–40 carefully selected words chosen from the most commonly used vocabulary in English.</p>
+
+        <p>You will learn in every section:</p>
+        <p>• The Arabic meaning of each word.</p>
+        <p>• The correct pronunciation of every word.</p>
+        <p>• Simple examples that demonstrate how the word is used.</p>
+        <p>• How to recognize and use the vocabulary naturally in everyday situations.</p>
+      </div>
+
+      <h3>Third: Interactive Features (What Makes This Course Unique?)</h3>
+      <div class="modal-list">
+        <p><strong>Simple Word Explanations:</strong> Don’t just memorize words! Understand the meaning of every vocabulary item through clear explanations and practical examples that show how it’s used in real life.</p>
+
+        <p><strong>Interactive Audio System:</strong> Listen to the correct pronunciation of every word with a single click, then practice repeating it until you can pronounce it confidently.</p>
+
+        <p><strong>Smart Progress Tracker:</strong> Monitor your learning progress in every section in real time and keep track of your completion percentage as you work toward finishing the entire course.</p>
+
+        <p><strong>AI Tutor (Chatbot):</strong> Need a deeper explanation? Ask the AI Tutor for additional explanations, examples, and helpful tips that reinforce your understanding and help you remember new vocabulary more effectively.</p>
+
+        <p><strong>Story Composer:</strong> Create short stories using the words you’ve learned to see them in different contexts and develop a more natural, long-lasting understanding of the vocabulary.</p>
+
+        <p><strong>Section Quizzes:</strong> Each section includes a short interactive quiz to help you assess your understanding and reinforce the vocabulary you’ve learned.</p>
+
+        <p><strong>XP (Experience Points) System:</strong> Earn experience points by learning new words, completing quizzes, and using the interactive features—making your learning journey more motivating, rewarding, and enjoyable.</p>
+      </div>
+    `;
+}
+
+
+
+function openVocab500Modal(event){
+  if(event) event.preventDefault();
+  const modal = document.getElementById('vocab500-modal');
+  if(!modal) return;
+  renderVocab500Modal();
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+
+
+
+function closeVocab500Modal(){
+  const modal = document.getElementById('vocab500-modal');
+  if(!modal) return;
+  modal.classList.add('hidden');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('click', function(event){
+  const trigger = event.target.closest('.course-details-trigger');
+if(trigger){
+    event.preventDefault();
+    const key = trigger.dataset.courseKey;
+
+   if(key === 'english-foundation'){
+  openFoundationModal();
+}
+
+if(key === 'vocab500'){
+  openVocab500Modal();
+}
+
+
+    return;
+}
+
+// إغلاق نافذة Foundation
+if(event.target.closest('.modal-close-btn') && event.target.closest('#foundation-modal')){
+    closeFoundationModal();
+}
+
+// إغلاق نافذة vocab500
+if(event.target.closest('.modal-close-btn') && event.target.closest('#vocab500-modal')){
+    closeVocab500Modal();
+}
+
+// إغلاق عبر الخلفية (overlay)
+if(event.target.id === 'foundation-modal-overlay'){
+    closeFoundationModal();
+}
+if(event.target.id === 'vocab500-modal-overlay'){
+    closeVocab500Modal();
+}
+
+});
+
+document.addEventListener('keydown', function(event){
+  if(event.key === 'Escape') closeFoundationModal();
+});
+
+// تشغيل وتهيئة الصفحة بالتزامن
+document.addEventListener("DOMContentLoaded", async () => {
+  await renderCourses();
+  applyLang();
+});
+
+</script>
+
+
+
+
+</body></html>
