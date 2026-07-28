@@ -1,15 +1,4 @@
 
-<script>
-  const allowed = ["test.html", "results.html"];
-
-  const current = location.pathname.split("/").pop().toLowerCase();
-
-  if (!allowed.includes(current)) {
-    window.stop();
-    location.replace("test.html");
-  }
-</script>
-
 
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"/>
