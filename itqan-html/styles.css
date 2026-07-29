@@ -607,3 +607,47 @@ html[dir="ltr"] .pop-close-modal-x { right: 20px; }
   margin: 0;
 }
 
+/* إزالة أي إطار أو ظل يظهر عند اختيار الخيار */
+.choice.sel {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  background: var(--card) !important; /* يرجع الخلفية طبيعية */
+}
+
+/* إزالة تأثير hover الذي يغير لون الإطار */
+.choice:hover {
+  border-color: var(--border) !important;
+}
+
+/* إزالة تأثير اللمس الأزرق في الهواتف */
+* {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* منع أي outline يظهر عند الضغط أو التركيز */
+.choice:focus,
+.choice:active,
+.choice:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* تلوين حرف الخيار فقط عند الاختيار */
+.choice.sel .choice-letter {
+  border-color: var(--primary) !important;
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* إزالة أي تأثير على نص الخيار */
+.choice.sel span {
+  color: inherit !important;
+}
+
+/* إصلاح مشكلة الإطار الأزرق في الهواتف */
+.choice,
+.choice * {
+  -webkit-tap-highlight-color: transparent !important;
+  outline: none !important;
+}
+
