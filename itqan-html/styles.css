@@ -651,3 +651,16 @@ html[dir="ltr"] .pop-close-modal-x { right: 20px; }
   outline: none !important;
 }
 
+/* إصلاح اختفاء التلوين عند الرجوع للسؤال */
+.choice[data-selected="true"] .choice-letter {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+}
+
+/* إزالة أي إطار أو ظل */
+.choice[data-selected="true"] {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  background: var(--card) !important;
+}
