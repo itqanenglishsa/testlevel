@@ -607,27 +607,3 @@ html[dir="ltr"] .pop-close-modal-x { right: 20px; }
   margin: 0;
 }
 
-/* إزالة تأثير اللمس الأزرق في الهواتف */
-* {
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-/* منع أي outline أو ظل عند التركيز أو اللمس */
-.choice:focus,
-.choice:active,
-.choice:focus-visible,
-button:focus,
-button:active,
-button:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* إصلاح خاص لسفاري */
-@supports (-webkit-touch-callout: none) {
-  .choice {
-    -webkit-user-select: none;
-    user-select: none;
-  }
-}
-
