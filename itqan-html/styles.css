@@ -98,7 +98,7 @@ html[lang="ar"] .heading-single-line{line-height:1.3;overflow:visible;clip-path:
 .demo-progress{height:.5rem;width:100%;overflow:hidden;border-radius:9999px;background:var(--secondary);margin-top:1.5rem}
 .demo-bar{height:100%;width:12%;border-radius:9999px;background:var(--gradient-hero)}
 .opt{border:1px solid var(--border);padding:.75rem 1rem;border-radius:.75rem;font-size:.875rem;color:var(--muted-foreground)}
-.opt-active{border-color:var(--primary);background:color-mix(in oklch,var(--primary) 5%,transparent);color:var(--foreground)}
+.opt-active{border-color:var(--primary);background:transparent;color:var(--foreground)}
 
 /* Test */
 .timer{display:inline-flex;align-items:center;gap:.375rem;background:var(--secondary);padding:.25rem .75rem;border-radius:9999px;font-weight:500;color:var(--secondary-foreground);font-size:.875rem}
@@ -107,9 +107,9 @@ html[lang="ar"] .heading-single-line{line-height:1.3;overflow:visible;clip-path:
 .q-context{margin-bottom:1.25rem;border-left:4px solid var(--primary);background:color-mix(in oklch,var(--secondary) 60%,transparent);padding:1rem;border-radius:.75rem;font-size:.875rem;line-height:1.6}
 html[dir="rtl"] .q-context{border-left:0;border-right:4px solid var(--primary)}
 .choice{display:flex;width:100%;align-items:center;gap:1rem;border:1px solid var(--border);background:var(--card);padding:1rem 1.25rem;border-radius:1rem;text-align:start;transition:all .15s}
-.choice:hover{border-color:color-mix(in oklch,var(--primary) 40%,var(--border))}
-.choice.sel{border-color:var(--primary);background:color-mix(in oklch,var(--primary) 5%,transparent);box-shadow:var(--shadow-card)}
-.choice-letter{flex-shrink:0;width:28px;height:28px;border-radius:9999px;border:1px solid var(--border);display:grid;place-items:center;font-size:.75rem;font-weight:600;color:var(--muted-foreground)}
+.choice:hover{border-color:var(--border)}
+.choice.sel{border-color:var(--border);background:var(--card);box-shadow:none}
+.choice-letter{flex-shrink:0;width:28px;height:28px;border-radius:9999px;border:1px solid var(--border);display:grid;place-items:center;font-size:.75rem;font-weight:600;color:var(--muted-foreground);transition:all .15s}
 .choice.sel .choice-letter{border-color:var(--primary);background:var(--primary);color:#fff}
 .nav-btns{margin-top:1.5rem;display:flex;align-items:center;justify-content:space-between}
 .btn-secondary{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border);background:var(--card);padding:.625rem 1.25rem;border-radius:9999px;font-size:.875rem;font-weight:500;color:var(--foreground)}
@@ -477,13 +477,13 @@ html[lang="ar"] .modal-body {
   width: 1em;
   height: 1em;
   vertical-align: middle;
-  display: inline-block; /* ← هذا هو المفتاح */
+  display: inline-block;
   object-fit: contain;
   margin-inline-end: 0.25em;
 }
 
 /* ==========================================================================
-   تنسيقات نافذة تسجيل الدخول المنبثقة المحدثة والتوسط الكامل 100%
+    تنسيقات نافذة تسجيل الدخول المنبثقة المحدثة والتوسط الكامل 100%
    ========================================================================== */
 
 .header-inner {
@@ -518,10 +518,10 @@ html[dir="ltr"] .user-icon-link {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5); 
-  display: none; /* يتم تحويله لـ flex عبر الـ JS عند الضغط */
-  justify-content: center; /* تتوسط أفقياً */
-  align-items: center;    /* تتوسط عمودياً */
-  z-index: 999999; /* رقم عالي جداً لتكون فوق كل شيء بالصفحة */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
   backdrop-filter: blur(4px); 
 }
 
@@ -533,8 +533,8 @@ html[dir="ltr"] .user-icon-link {
   position: relative;
   max-width: 420px;
   width: 90%;
-  max-height: 90vh; /* يمنع الصندوق من الخروج عن حدود الشاشة عمودياً */
-  overflow-y: auto; /* يظهر شريط تمرير داخلي صغير إذا كان المحتوى طويلاً على الشاشات الصغيرة */
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 15px 40px rgba(0,0,0,0.3);
   animation: popFadeInModal 0.3s ease;
   text-align: center;
@@ -570,7 +570,7 @@ html[dir="ltr"] .pop-close-modal-x { right: 20px; }
   text-align: center;
 }
 .pop-auth-logo {
-  width: 140px !important; /* حجم متناسق للشعار داخل المنبثقة */
+  width: 140px !important;
   height: auto !important;
   display: inline-block !important;
 }
@@ -606,69 +606,3 @@ html[dir="ltr"] .pop-close-modal-x { right: 20px; }
   line-height: 1.7;
   margin: 0;
 }
-
-/* إزالة أي إطار أو ظل يظهر عند اختيار الخيار */
-.choice.sel {
-  border-color: transparent !important;
-  box-shadow: none !important;
-  background: var(--card) !important; /* يرجع الخلفية طبيعية */
-}
-
-/* إزالة تأثير hover الذي يغير لون الإطار */
-.choice:hover {
-  border-color: var(--border) !important;
-}
-
-/* إزالة تأثير اللمس الأزرق في الهواتف */
-* {
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-/* منع أي outline يظهر عند الضغط أو التركيز */
-.choice:focus,
-.choice:active,
-.choice:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* تلوين حرف الخيار فقط عند الاختيار */
-.choice.sel .choice-letter {
-  border-color: var(--primary) !important;
-  background: var(--primary) !important;
-  color: #fff !important;
-}
-
-/* إزالة أي تأثير على نص الخيار */
-.choice.sel span {
-  color: inherit !important;
-}
-
-/* إصلاح مشكلة الإطار الأزرق في الهواتف */
-.choice,
-.choice * {
-  -webkit-tap-highlight-color: transparent !important;
-  outline: none !important;
-}
-
-/* تلوين حرف الخيار فقط عند اختياره */
-.choice.selected .choice-letter {
-  background: var(--primary) !important;
-  color: #fff !important;
-  border-color: var(--primary) !important;
-}
-
-/* إزالة أي إطار أو ظل */
-.choice.selected {
-  border-color: transparent !important;
-  box-shadow: none !important;
-  background: var(--card) !important;
-}
-
-/* إصلاح مشكلة الهواتف */
-.choice,
-.choice * {
-  -webkit-tap-highlight-color: transparent !important;
-  outline: none !important;
-}
-
