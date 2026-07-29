@@ -606,3 +606,11 @@ html[dir="ltr"] .pop-close-modal-x { right: 20px; }
   line-height: 1.7;
   margin: 0;
 }
+
+/* إزالة الإطار الأزرق عند اللمس في الهواتف */
+.choice:focus,
+.choice:active,
+.choice:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
