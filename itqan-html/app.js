@@ -1456,28 +1456,3 @@ function getCoursePath(courseKey) {
   return "#";
 }
 
-// عند اختيار خيار
-document.querySelectorAll('.choice').forEach(choice => {
-  choice.addEventListener('click', () => {
-    // إزالة التحديد من كل الخيارات
-    document.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
-    // إضافة التحديد للخيار الحالي
-    choice.classList.add('selected');
-    // حفظ الاختيار في localStorage
-    localStorage.setItem('selectedChoice', choice.textContent.trim());
-  });
-});
-
-// عند تحميل الصفحة أو الرجوع للسؤال
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('selectedChoice');
-  if (saved) {
-    document.querySelectorAll('.choice').forEach(choice => {
-      if (choice.textContent.trim() === saved) {
-        choice.classList.add('selected');
-      }
-    });
-  }
-});
-
-
