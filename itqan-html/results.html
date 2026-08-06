@@ -86,7 +86,7 @@ function render(){
     <section class="mt-10"><h2 class="text-xl font-semibold">${t('results.byLevel')}</h2><div class="card mt-4" style="padding:1.5rem"><div style="display:flex;flex-direction:column;gap:1rem">${levelsHtml}</div></div></section>
         <div class="results-buttons mt-10 flex items-center justify-center gap-4" style="flex-wrap:wrap">
       <button class="btn-secondary" onclick="sessionStorage.removeItem(STORAGE_KEY);location.href='test.html'">↻ ${t('results.retake')}</button>
-      <button class="cta" onclick="alert('فور توفر الكورسات على سلة سيتم نقلكم إليها مباشرة.')" data-i18n="results.viewCourses"></button>
+      <a href="https://itqanenglishstore.com" target="_blank" class="cta" data-i18n="results.viewCourses">عرض الدورات ←</a>
 
     </div>`;
 }
