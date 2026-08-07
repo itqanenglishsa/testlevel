@@ -792,32 +792,10 @@ const LEVEL_DESCRIPTIONS = {
       en:"You can interact with fluency and produce clear, detailed text on a wide range of subjects.",
       ar:"يمكنك التفاعل بطلاقة وإنتاج نصوص واضحة ومفصلة حول مجموعة واسعة من المواضيع."
     }
-  },
-
-  C1:{
-    title:{
-      en:"Advanced",
-      ar:"متقدم"
-    },
-    desc:{
-      en:"You can express ideas fluently and use language flexibly for academic and professional purposes.",
-      ar:"يمكنك التعبير عن أفكارك بطلاقة واستخدام اللغة بمرونة للأغراض الأكاديمية والمهنية."
-    }
-  },
-
-  C2:{
-    title:{
-      en:"Proficient",
-      ar:"متمكن"
-    },
-    desc:{
-      en:"You can understand virtually everything heard or read with ease and precision.",
-      ar:"يمكنك فهم كل ما تسمعه أو تقرؤه تقريبًا بسهولة ودقة عالية."
-    }
   }
 };
-const LEVEL_WEIGHT = {A1:1,A2:2,B1:3,B2:4,C1:5,C2:6};
-const LEVELS_ORDER = ["A1","A2","B1","B2","C1","C2"];
+const LEVEL_WEIGHT = {A1:1,A2:2,B1:3,B2:4};
+const LEVELS_ORDER = ["A1","A2","B1","B2"];
 
 function getLang(){ try{ const s=localStorage.getItem("itqan_lang"); return (s==="ar"||s==="en")?s:"en";}catch{return "en";}}
 function setLang(l){ try{localStorage.setItem("itqan_lang",l);}catch{} location.reload(); }
@@ -874,7 +852,7 @@ function getSkillLevel(answers, section){
 }
 
 function calculateLevel(answers){
-  const perLevel = {A1:{correct:0,total:0},A2:{correct:0,total:0},B1:{correct:0,total:0},B2:{correct:0,total:0},C1:{correct:0,total:0},C2:{correct:0,total:0}};
+  const perLevel = {A1:{correct:0,total:0},A2:{correct:0,total:0},B1:{correct:0,total:0},B2:{correct:0,total:0}};
   const perSection = {
     Grammar:{correct:0,total:0},
     Vocabulary:{correct:0,total:0},
@@ -905,10 +883,13 @@ function calculateLevel(answers){
   let level = "A1";
   for(const lvl of LEVELS_ORDER){
     const p = perLevel[lvl];
-    if(p.total>0 && p.correct/p.total >= 0.6) level = lvl;
-    else break;
+    if(p.total>0 && p.correct/p.total >= 0.6){
+      level = lvl;
+    } else {
+      break;
+    }
   }
-  if(ratio >= 0.95) level = "C2";
+  if(ratio >= 0.95) level = "B2";
 
   const perSectionLevel = {
     Listening: getSkillLevel(answers, 'Listening'),
